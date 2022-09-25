@@ -8,10 +8,15 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,12 +34,32 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    MyComplexLayout()
+                    MyStateExample()
                 }
             }
         }
     }
 }
+
+@Composable
+fun MyStateExample() {
+    // remember: no mantiene el estado en el ciclo de vida de la 
+    // actividad
+    //rememberSaveable: mantiene el estado en las actividades
+    var counter by rememberSaveable {
+        mutableStateOf(0)
+    }
+    Column(
+        Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Button(onClick = { counter += 1 }) {
+            Text(text = "Pulsar")
+        }
+        Text(text = "He sido pulsado $counter veces")
+    }
+}
+
 
 @Composable
 fun MyComplexLayout() {
@@ -51,6 +76,7 @@ fun MyComplexLayout() {
                 color = Color.White
             )
         }
+        MySpacer(size = 30)
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -82,6 +108,7 @@ fun MyComplexLayout() {
                 )
             }
         }
+        MySpacer(size = 80)
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -95,6 +122,11 @@ fun MyComplexLayout() {
             )
         }
     }
+}
+
+@Composable
+fun MySpacer(size: Int) {
+    Spacer(modifier = Modifier.height(size.dp))
 }
 
 
@@ -196,6 +228,7 @@ fun DefaultPreview() {
 //        MyBox()
 //        MyColumn()
 //        MyRow()
-        MyComplexLayout()
+//        MyComplexLayout()
+        MyStateExample()
     }
 }
