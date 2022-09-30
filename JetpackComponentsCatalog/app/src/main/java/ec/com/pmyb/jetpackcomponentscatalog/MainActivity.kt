@@ -6,10 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -22,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -31,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
+import ec.com.pmyb.jetpackcomponentscatalog.ui.CheckInfo
 import ec.com.pmyb.jetpackcomponentscatalog.ui.theme.JetpackComponentsCatalogTheme
 
 
@@ -56,7 +55,17 @@ class MainActivity : ComponentActivity() {
 //                        MyTextFieldOutLine()
 //                        MyButtonExample()
 //                        MyIcon()
-                        MyProgress()
+//                        MyProgressAdvance()
+//                        MySwitch()
+                        val myOptions =
+                            getOptions(titles = listOf("Opcion 1", "Opcion 2", "Opcion 3"))
+                        MyTriStatusCheckBox(myOptions)
+
+                        myOptions.forEach {
+                            MyCheckBoxWithTextCompleted(it)
+                        }
+
+                        MyCheckBoxWithText()
                     }
                 }
             }
@@ -72,12 +81,140 @@ fun DefaultPreview() {
 //        MyTextField()
 //        MyTextFieldAdvance()
 //        MyTextFieldOutLine()
-        MyProgress()
+//        MySwitch()
+        MyCheckBoxWithText()
+
+    }
+}
+
+@Composable
+fun MyTriStatusCheckBox(option:List<CheckInfo>) {
+    var status by rememberSaveable {
+        mutableStateOf(ToggleableState.Off)
+    }
+    TriStateCheckbox(state = status, onClick = {
+        status = when( status){
+            ToggleableState.On -> {
+                option.map {
+                    it.seleted = true
+                }
+                ToggleableState.Off
+            }
+            ToggleableState.Off -> ToggleableState.Indeterminate
+            ToggleableState.Indeterminate -> ToggleableState.On
+        }
+
+    })
+
+}
+
+
+@Composable
+fun MyCheckBoxWithTextCompleted(checkInfo: CheckInfo) {
+    Row(Modifier.padding(8.dp)) {
+        Checkbox(
+            checked = checkInfo.seleted,
+            onCheckedChange = { checkInfo.onCheckedChange(!checkInfo.seleted) }
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(text = checkInfo.title, modifier = Modifier.padding(top = 8.dp))
+    }
+}
+
+@Composable
+fun getOptions(titles: List<String>): List<CheckInfo> {
+    return titles.map {
+        var status by rememberSaveable {
+            mutableStateOf(false)
+        }
+        CheckInfo(it, status) { myNewStatus -> status = myNewStatus }
+    }
+}
+
+@Composable
+fun MyCheckBoxWithText() {
+    var status by rememberSaveable {
+        mutableStateOf(true)
+    }
+    Row(Modifier.padding(8.dp)) {
+        Checkbox(
+            checked = status, onCheckedChange = { status = !status }
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(text = "Ejemplo 1", modifier = Modifier.padding(top = 8.dp))
+    }
+}
+
+
+@Composable
+fun MyCheckBox() {
+    var status by rememberSaveable {
+        mutableStateOf(true)
+    }
+    Checkbox(
+        checked = status, onCheckedChange = { status = !status }, enabled = true,
+        colors = CheckboxDefaults.colors(
+            checkedColor = Color.Red,
+            uncheckedColor = Color.Yellow,
+            checkmarkColor = Color.Blue
+        )
+    )
+}
+
+@Composable
+fun MySwitch() {
+    var status by rememberSaveable {
+        mutableStateOf(true)
+    }
+    Switch(
+        checked = status, onCheckedChange = { status = !status }, enabled = true,
+        colors = SwitchDefaults.colors(
+            uncheckedThumbColor = Color.Red,
+            checkedThumbColor = Color.Green,
+            checkedTrackColor = Color.Cyan,
+            uncheckedTrackColor = Color.Magenta
+        )
+    )
+}
+
+@Composable
+fun MyProgressAdvance() {
+    var progresstatus by rememberSaveable {
+        mutableStateOf(0f)
+    }
+
+    Column(
+        Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+//        CircularProgressIndicator(progress = progresstatus)
+        LinearProgressIndicator(progress = progresstatus)
+        Row(Modifier.fillMaxWidth()) {
+            Button(onClick = {
+                if (progresstatus < 1.0f) {
+                    progresstatus += 0.1f
+                }
+            }) {
+                Text(text = "Incrementar")
+            }
+            Button(onClick = {
+                if (progresstatus > 0.000000000000f) {
+                    progresstatus -= 0.1f
+                }
+            }) {
+                Text(text = "reducir")
+            }
+
+        }
     }
 }
 
 @Composable
 fun MyProgress() {
+    var showLoading by rememberSaveable {
+        mutableStateOf(false)
+    }
     Column(
         Modifier
             .padding(24.dp)
@@ -85,12 +222,17 @@ fun MyProgress() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        CircularProgressIndicator(color = Color.Red, strokeWidth = 5.dp)
-        LinearProgressIndicator(
-            modifier = Modifier.padding(32.dp),
-            color = Color.Red,
-            backgroundColor = Color.Gray
-        )
+        if (showLoading) {
+            CircularProgressIndicator(color = Color.Red, strokeWidth = 5.dp)
+            LinearProgressIndicator(
+                modifier = Modifier.padding(32.dp),
+                color = Color.Red,
+                backgroundColor = Color.Gray
+            )
+        }
+        Button(onClick = { showLoading = !showLoading }) {
+            Text("Cargar Perfil")
+        }
     }
 }
 
