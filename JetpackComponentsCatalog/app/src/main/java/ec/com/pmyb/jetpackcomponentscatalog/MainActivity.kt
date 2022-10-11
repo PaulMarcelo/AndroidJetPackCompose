@@ -6,11 +6,13 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -31,6 +33,7 @@ import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import ec.com.pmyb.jetpackcomponentscatalog.ui.CheckInfo
 import ec.com.pmyb.jetpackcomponentscatalog.ui.theme.JetpackComponentsCatalogTheme
+import kotlin.math.exp
 
 
 class MainActivity : ComponentActivity() {
@@ -41,6 +44,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             JetpackComponentsCatalogTheme {
                 // A surface container using the 'background' color from the theme
+//                var selected by remember{
+//                    mutableStateOf("Paul")
+//                }
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
@@ -57,15 +63,23 @@ class MainActivity : ComponentActivity() {
 //                        MyIcon()
 //                        MyProgressAdvance()
 //                        MySwitch()
-                        val myOptions =
-                            getOptions(titles = listOf("Opcion 1", "Opcion 2", "Opcion 3"))
-                        MyTriStatusCheckBox(myOptions)
-
-                        myOptions.forEach {
-                            MyCheckBoxWithTextCompleted(it)
-                        }
-
-                        MyCheckBoxWithText()
+//                        val myOptions =
+//                            getOptions(titles = listOf("Opcion 1", "Opcion 2", "Opcion 3"))
+//                        MyTriStatusCheckBox(myOptions)
+//
+//                        myOptions.forEach {
+//                            MyCheckBoxWithTextCompleted(it)
+//                        }
+//
+//                        MyCheckBoxWithText()
+//                        MyRadioButton()
+//                        MyRadioButtonList(selected){selected=it}
+//                        MyCard()
+                        MyDivider()
+                        MyDrowDownMenu()
+                        BasicSlider()
+                        AdvanceSlider()
+                        MyRangeSlider()
                     }
                 }
             }
@@ -82,18 +96,139 @@ fun DefaultPreview() {
 //        MyTextFieldAdvance()
 //        MyTextFieldOutLine()
 //        MySwitch()
-        MyCheckBoxWithText()
+//        MyCheckBoxWithText()
+//        MyCard()
+        MyDivider()
 
     }
 }
 
 @Composable
-fun MyTriStatusCheckBox(option:List<CheckInfo>) {
+fun MyDrowDownMenu() {
+    var selectedText by remember {
+        mutableStateOf("")
+    }
+
+    var expanded by remember {
+        mutableStateOf(false)
+    }
+
+    var dessert = listOf("Helado", "Chocolate", "Cafe", "Fruta", "Natillas", "Chilaquiles")
+
+    Column(Modifier.padding(20.dp)) {
+        OutlinedTextField(value = selectedText, onValueChange = { selectedText = it },
+            enabled = false, readOnly = true, modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    expanded = true
+                })
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            dessert.forEach {
+                DropdownMenuItem(onClick = {
+                    expanded = false
+                    selectedText = it}) {
+                    Text(text = it)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun MyDivider() {
+    Divider(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp), color = Color.Red
+    )
+}
+
+@Composable
+fun MyBagbeBox() {
+    BadgedBox(modifier = Modifier.padding(16.dp),
+        badge = {
+            Badge { Text("800") }
+        }
+    ) {
+        Icon(imageVector = Icons.Default.Star, contentDescription = "")
+    }
+}
+
+@Composable
+fun MyCard() {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        elevation = 12.dp,
+        shape = MaterialTheme.shapes.small,
+        backgroundColor = Color.Gray,
+        contentColor = Color.White,
+        border = BorderStroke(5.dp, Color.Black)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(text = "Ejemplo1")
+            Text(text = "Ejemplo2")
+            Text(text = "Ejemplo3")
+        }
+    }
+}
+
+@Composable
+fun MyRadioButtonList(name: String, onValueChange: (String) -> Unit) {
+    Column(Modifier.fillMaxWidth()) {
+        Row(modifier = Modifier.fillMaxWidth()) {
+            RadioButton(selected = name == "Paul",
+                onClick = { onValueChange("Paul") }
+            )
+            Text(text = "Paul")
+        }
+        Row(modifier = Modifier.fillMaxWidth()) {
+            RadioButton(selected = name == "David", onClick = { onValueChange("David") })
+            Text(text = "David")
+        }
+        Row(modifier = Modifier.fillMaxWidth()) {
+            RadioButton(selected = name == "Maria", onClick = { onValueChange("Maria") })
+            Text(text = "Maria")
+        }
+        Row(modifier = Modifier.fillMaxWidth()) {
+            RadioButton(selected = name == "Pepe", onClick = { onValueChange("Pepe") })
+            Text(text = "Pepe")
+        }
+    }
+}
+
+
+@Composable
+fun MyRadioButton() {
+
+    Row(modifier = Modifier.fillMaxWidth()) {
+        RadioButton(
+            selected = false, onClick = { /*TODO*/ },
+            enabled = true,
+            colors = RadioButtonDefaults.colors(
+                selectedColor = Color.Red,
+                unselectedColor = Color.Yellow,
+                disabledColor = Color.Green
+            )
+        )
+        Text(text = "Ejemplo1")
+    }
+
+
+}
+
+@Composable
+fun MyTriStatusCheckBox(option: List<CheckInfo>) {
     var status by rememberSaveable {
         mutableStateOf(ToggleableState.Off)
     }
     TriStateCheckbox(state = status, onClick = {
-        status = when( status){
+        status = when (status) {
             ToggleableState.On -> {
                 option.map {
                     it.seleted = true
