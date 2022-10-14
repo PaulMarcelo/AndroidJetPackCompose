@@ -1,6 +1,7 @@
 package ec.com.pmyb.jetpackcomponentscatalog
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
@@ -51,13 +52,25 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
+                    var show by remember {
+                        mutableStateOf(false)
+                    }
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Button(onClick = { show = true }) {
+                            Text(text = "Mostrar Dialogo")
+                        }
+                        MyDialog(
+                            show,
+                            onDismiss = { show = false },
+                            { Log.i("Mensaje", "Mensaje confirmacion") })
+                    }
 //                    MyText("Android")
 //                    var myText by remember { mutableStateOf("PAUl") }
 //                    MyTextField(myText) {
 //                        myText = it
 //                    }
 //                    MyTextFieldAdvance()
-                    Column {
+//                    Column {
 //                        MyTextFieldOutLine()
 //                        MyButtonExample()
 //                        MyIcon()
@@ -75,12 +88,13 @@ class MainActivity : ComponentActivity() {
 //                        MyRadioButton()
 //                        MyRadioButtonList(selected){selected=it}
 //                        MyCard()
-                        MyDivider()
-                        MyDrowDownMenu()
-                        BasicSlider()
-                        AdvanceSlider()
-                        MyRangeSlider()
-                    }
+//                        MyDivider()
+//                        MyDrowDownMenu()
+//                        BasicSlider()
+//                        AdvanceSlider()
+//                        MyRangeSlider()
+
+//                    }
                 }
             }
         }
@@ -130,7 +144,8 @@ fun MyDrowDownMenu() {
             dessert.forEach {
                 DropdownMenuItem(onClick = {
                     expanded = false
-                    selectedText = it}) {
+                    selectedText = it
+                }) {
                     Text(text = it)
                 }
             }
