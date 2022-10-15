@@ -10,7 +10,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
@@ -34,7 +33,6 @@ import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import ec.com.pmyb.jetpackcomponentscatalog.ui.CheckInfo
 import ec.com.pmyb.jetpackcomponentscatalog.ui.theme.JetpackComponentsCatalogTheme
-import kotlin.math.exp
 
 
 class MainActivity : ComponentActivity() {
@@ -59,10 +57,14 @@ class MainActivity : ComponentActivity() {
                         Button(onClick = { show = true }) {
                             Text(text = "Mostrar Dialogo")
                         }
-                        MyDialog(
-                            show,
-                            onDismiss = { show = false },
-                            { Log.i("Mensaje", "Mensaje confirmacion") })
+
+                        MyConfirmationDialog(show) { show = false }
+                       // MyCustomDialog(show) { show = false }
+                        //MySimpleCustomDialog(show, {show=false})
+//                        MyAlertDialog(
+//                            show,
+//                            onDismiss = { show = false },
+//                            { Log.i("Mensaje", "Mensaje confirmacion") })
                     }
 //                    MyText("Android")
 //                    var myText by remember { mutableStateOf("PAUl") }
