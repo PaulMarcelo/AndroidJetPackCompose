@@ -50,22 +50,25 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    var show by remember {
-                        mutableStateOf(false)
-                    }
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Button(onClick = { show = true }) {
-                            Text(text = "Mostrar Dialogo")
-                        }
+                    SuperHeroGridView()
+//                    SuperHeroView()
+//                    SimpleRecyclerView()
 
-                        MyConfirmationDialog(show) { show = false }
-                       // MyCustomDialog(show) { show = false }
-                        //MySimpleCustomDialog(show, {show=false})
+//                    var show by remember {
+//                        mutableStateOf(false)
+//                    }
+//                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+//                        Button(onClick = { show = true }) {
+//                            Text(text = "Mostrar Dialogo")
+//                        }
+//                        MyConfirmationDialog(show) { show = false }
+                    // MyCustomDialog(show) { show = false }
+                    //MySimpleCustomDialog(show, {show=false})
 //                        MyAlertDialog(
 //                            show,
 //                            onDismiss = { show = false },
 //                            { Log.i("Mensaje", "Mensaje confirmacion") })
-                    }
+//                    }
 //                    MyText("Android")
 //                    var myText by remember { mutableStateOf("PAUl") }
 //                    MyTextField(myText) {
