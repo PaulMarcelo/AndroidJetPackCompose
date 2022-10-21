@@ -47,10 +47,14 @@ class MainActivity : ComponentActivity() {
 //                    mutableStateOf("Paul")
 //                }
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
+//                    modifier = Modifier.fillMaxSize(),
+                    //color = MaterialTheme.colors.background
+                    color = Color.White
                 ) {
-                    SuperHeroGridView()
+                    ScaffoldExample()
+//                    SuperHeroStickyView()
+//                    SuperHeroWithSpecialControlsView()
+                    //SuperHeroGridView()
 //                    SuperHeroView()
 //                    SimpleRecyclerView()
 
