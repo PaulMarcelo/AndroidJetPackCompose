@@ -1,7 +1,6 @@
 package ec.com.pmyb.jetpackcomponentscatalog
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
@@ -29,8 +28,14 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
+import ec.com.pmyb.jetpackcomponentscatalog.model.Routes
 import ec.com.pmyb.jetpackcomponentscatalog.ui.CheckInfo
 import ec.com.pmyb.jetpackcomponentscatalog.ui.theme.JetpackComponentsCatalogTheme
 
@@ -48,10 +53,39 @@ class MainActivity : ComponentActivity() {
 //                }
                 Surface(
 //                    modifier = Modifier.fillMaxSize(),
-                    //color = MaterialTheme.colors.background
-                    color = Color.White
+                    color = MaterialTheme.colors.background
+//                    color = Color.White
                 ) {
-                    ScaffoldExample()
+                    val navigatorController = rememberNavController()
+                    NavHost(
+                        navController = navigatorController,
+                        startDestination = Routes.Pantalla1.route
+                    ) {
+                        composable(Routes.Pantalla1.route) { Screen1(navigatorController) }
+                        composable(Routes.Pantalla2.route) { Screen2(navigatorController) }
+                        composable(Routes.Pantalla3.route) { Screen3(navigatorController) }
+//                        composable("pantalla4/{name}") { backStackEntry ->
+                        composable(Routes.Pantalla4.route, arguments = listOf(navArgument("age") {
+                            type =
+                                NavType.IntType
+                        })) { backStackEntry ->
+                            Screen4(
+                                navigatorController,
+//                                backStackEntry.arguments?.getString("name").orEmpty()
+                                backStackEntry.arguments?.getInt("age") ?: 0
+                            )
+                        }
+                        composable(
+                            Routes.Pantalla5.route,
+                            arguments = listOf(navArgument("name") { defaultValue = "Pepe" })
+                        ) { backStackEntry ->
+                            Screen5(
+                                navigatorController,
+                                backStackEntry.arguments?.getString("name")
+                            )
+                        }
+                    }
+//                    ScaffoldExample()
 //                    SuperHeroStickyView()
 //                    SuperHeroWithSpecialControlsView()
                     //SuperHeroGridView()
