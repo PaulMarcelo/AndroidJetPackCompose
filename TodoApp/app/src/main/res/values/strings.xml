@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">TodoApp</string>
+    <string name="add_you_tasks">Agrega tu tarea</string>
+    <string name="add_tasks">Agregar tarea</string>
+</resources>

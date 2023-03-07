@@ -56,35 +56,39 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
 //                    color = Color.White
                 ) {
-                    val navigatorController = rememberNavController()
-                    NavHost(
-                        navController = navigatorController,
-                        startDestination = Routes.Pantalla1.route
-                    ) {
-                        composable(Routes.Pantalla1.route) { Screen1(navigatorController) }
-                        composable(Routes.Pantalla2.route) { Screen2(navigatorController) }
-                        composable(Routes.Pantalla3.route) { Screen3(navigatorController) }
-//                        composable("pantalla4/{name}") { backStackEntry ->
-                        composable(Routes.Pantalla4.route, arguments = listOf(navArgument("age") {
-                            type =
-                                NavType.IntType
-                        })) { backStackEntry ->
-                            Screen4(
-                                navigatorController,
-//                                backStackEntry.arguments?.getString("name").orEmpty()
-                                backStackEntry.arguments?.getInt("age") ?: 0
-                            )
-                        }
-                        composable(
-                            Routes.Pantalla5.route,
-                            arguments = listOf(navArgument("name") { defaultValue = "Pepe" })
-                        ) { backStackEntry ->
-                            Screen5(
-                                navigatorController,
-                                backStackEntry.arguments?.getString("name")
-                            )
-                        }
-                    }
+                    CrossfadeExampleAnimation()
+                    //VisivilityAnimation()
+//                    SizeAnimation()
+//                    ColorAnimationSimple()
+//                    val navigatorController = rememberNavController()
+//                    NavHost(
+//                        navController = navigatorController,
+//                        startDestination = Routes.Pantalla1.route
+//                    ) {
+//                        composable(Routes.Pantalla1.route) { Screen1(navigatorController) }
+//                        composable(Routes.Pantalla2.route) { Screen2(navigatorController) }
+//                        composable(Routes.Pantalla3.route) { Screen3(navigatorController) }
+////                        composable("pantalla4/{name}") { backStackEntry ->
+//                        composable(Routes.Pantalla4.route, arguments = listOf(navArgument("age") {
+//                            type =
+//                                NavType.IntType
+//                        })) { backStackEntry ->
+//                            Screen4(
+//                                navigatorController,
+////                                backStackEntry.arguments?.getString("name").orEmpty()
+//                                backStackEntry.arguments?.getInt("age") ?: 0
+//                            )
+//                        }
+//                        composable(
+//                            Routes.Pantalla5.route,
+//                            arguments = listOf(navArgument("name") { defaultValue = "Pepe" })
+//                        ) { backStackEntry ->
+//                            Screen5(
+//                                navigatorController,
+//                                backStackEntry.arguments?.getString("name")
+//                            )
+//                        }
+//                    }
 //                    ScaffoldExample()
 //                    SuperHeroStickyView()
 //                    SuperHeroWithSpecialControlsView()
@@ -144,7 +148,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Preview(showBackground = true)
+//@Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     JetpackComponentsCatalogTheme {
